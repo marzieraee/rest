@@ -1,8 +1,12 @@
-# from rest_framework import serializers
+from rest_framework import serializers
+
+from .models import MyPost
 
 
-# class PostSerializer(serializers.Serializer):
-#     title=serializers.CharField()
-#     contet=serializers.CharField()
-#     likes=serializers.IntegerField()
+class PostSerializer(serializers.Serializer):
+    title=serializers.CharField()
     
+    
+    def create(self, validated_data):
+        instanc=MyPost.objects.create(**validated_data)
+        return instanc  
