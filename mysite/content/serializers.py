@@ -1,12 +1,31 @@
+from django.forms import CharField
 from rest_framework import serializers
 
-from .models import MyPost
+from .models import MyPost, MyUser
 
 
-class PostSerializer(serializers.Serializer):
-    title=serializers.CharField()
+
+
+class UserSerializer(serializers.ModelSerializer):
     
+   class Meta:
+        
+        model=MyUser
+        
+        fields=('username','email')
+        
+        
+        
+
+class PostSerializer(serializers.ModelSerializer):
+    author=UserSerializer()
+    class Meta:
+        
+        model=MyPost
+        
+        fields=('title','contet','likes','author')
     
-    def create(self, validated_data):
-        instanc=MyPost.objects.create(**validated_data)
-        return instanc  
+       
+       
+       
+

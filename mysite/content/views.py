@@ -1,5 +1,6 @@
 
 from urllib import request
+import jwt
 from rest_framework import status
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
@@ -9,10 +10,14 @@ from .models import MyPost, MyUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import PostSerializer
-
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class PostListApi(APIView):
+    permission_classes=(IsAuthenticated,)
+    authentication_classes=(SessionAuthentication,JWTAuthentication)
+                
     def get(self,request,*args, **kwargs):
         posts=MyPost.objects.all()
         serializer=PostSerializer(posts,many=True)
@@ -31,6 +36,7 @@ class PostListApi(APIView):
     
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class PostDetailApi(APIView):
